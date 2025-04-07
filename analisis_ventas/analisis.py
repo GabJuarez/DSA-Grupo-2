@@ -27,15 +27,7 @@ from functools import reduce # Para la funcion reduce tenemos que importar la li
 
 # Función para ingresar los datos de venta
 def ingresar_venta(): # Definimos una funcion donde se ingresaran los datos de la venta
-    try:
         producto = input("Ingrese el nombre del producto: ")
-        if ord(producto) < 65 and ord(producto) > 90:
-            raise TypeError
-    except TypeError as e:
-        print(f'Error: {e}')
-        print('Por favor ingrese solamente texto')
-        return ingresar_venta()
-    else:
         try:
             precio = float(input("Ingrese el precio unitario: "))
             if precio <= 0: 
