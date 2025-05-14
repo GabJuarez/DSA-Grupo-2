@@ -15,19 +15,18 @@ procesos = deque()
 def registrar_procesos():
     n = int(input("Ingrese el número de procesos a atender: "))
 
-    id = 1
+
     for i in range (n):
+        id = int(input(f"Ingrese el id del proceso {i+1}: "))
         nombre = input(f"Ingrese el nombre del proceso {i+1}: ")
         duracion = str(randint(10,100))+'ms'
         proceso = (id, nombre, duracion)
         procesos.append(proceso)
-        id += 1
+        
     print("\n")
 
 def atender_procesos():
-    n = int(input("Ingrese el número de procesos que van a ser atendidos: "))
     if procesos:
-        for i in range (n):
             proceso = procesos.popleft()
             print(f"El proceso {proceso[1]}, con identificador {proceso[0]} ha sido atendido")
     else:
@@ -44,7 +43,25 @@ def visualizar_cola():
         print("No hay procesos en la cola para atender")
     print("\n")
     
-registrar_procesos()
-visualizar_cola()
-atender_procesos()
-visualizar_cola()
+def menu():
+    while True:
+        print("Microprocesador")
+        print("1. Agregar procesos a la cola")
+        print("2. Atender siguiente proceso")
+        print("3. Visualizar procesos en la cola")
+        print("4. Salir")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            registrar_procesos()
+        elif opcion == "2":
+            atender_procesos()
+        elif opcion == "3":
+            visualizar_cola()
+        elif opcion == "4":
+            print("saliendo...")
+            break
+        else:
+            print("intenta de nuevo, opción inválida\n")
+
+menu()
