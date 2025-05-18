@@ -73,3 +73,6 @@ mostrar_cola()
 procesar()
 ver_documento_actual()
 mostrar_cola()
+
+
+

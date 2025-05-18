@@ -15,7 +15,7 @@ def agregar_llamada():
 
     for i in range (n):
         nombre = input(f"Ingrese el nombre cliente {i+1}: ")
-        motivo = input(f"Inngrese el motivo de la llamda: ")
+        motivo = input(f"Ingrese el motivo de la llamada: ")
         llamada =  (nombre, motivo)
         llamadas.append(llamada)
         print("\n")
