@@ -23,21 +23,28 @@ def atender_llamada(agente, llamada):
     return agente
 
 def despachar_llamadas():
-    tareas = []
-    agentes_en_servicio = []
-    with ThreadPoolExecutor(max_workers=len(agentes_disponibles)) as executor:
-        while llamadas and agentes_disponibles:
-            agente = agentes_disponibles.pop(0)
-            llamada = llamadas.popleft()
-            tarea = executor.submit(atender_llamada, agente, llamada)
-            tareas.append(tarea)
-            agentes_en_servicio.append(agente)
-        #esperar a que todos los agentes terminen antes de devolverlos a la lista de disponibles
-        for future in as_completed(tareas):
-            agente_que_vuelve = future.result()
-            agentes_disponibles.append(agente_que_vuelve)
-        if not tareas:
-            print("No hay llamadas o agentes disponibles para despachar.\n")
+    while llamadas:  # mientras haya llamadas en la cola
+        tareas = []
+        agentes_en_servicio = []
+        
+        # Usamos el ThreadPoolExecutor con la cantidad actual de agentes disponibles
+        with ThreadPoolExecutor(max_workers=len(agentes_disponibles)) as executor:
+            # asignamos llamadas a todos los agentes disponibles
+            while llamadas and agentes_disponibles:
+                agente = agentes_disponibles.pop(0)
+                llamada = llamadas.popleft()
+                tarea = executor.submit(atender_llamada, agente, llamada)
+                tareas.append(tarea)
+                agentes_en_servicio.append(agente)
+            
+            # esperamos que todos terminen y devolvemos los agentes disponibles
+            for future in as_completed(tareas):
+                agente_que_vuelve = future.result()
+                agentes_disponibles.append(agente_que_vuelve)
+        
+        #aqui el ciclo vuelve a evaluar si quedan llamadas y repite el proceso automáticamente
+    print("Todas las llamadas han sido atendidas.\n")
+
 
 def visualizar_cola():
     print("Llamadas en la cola: ")
