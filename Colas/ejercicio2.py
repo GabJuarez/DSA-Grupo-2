@@ -1,3 +1,6 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from random import randint
+from time import sleep
 from collections import deque
 
 llamadas = deque()
@@ -12,19 +15,29 @@ def agregar_llamada():
         llamadas.append(llamada)
         print("\n")
 
-def atender_llamadas():
-    if not agentes_disponibles:
-        print("No hay agentes disponibles en este momento.\n")
-        return
-    if llamadas:
-        llamada = llamadas.popleft()
-        agente = agentes_disponibles.pop(0)
-        print(f"La llamada de: {llamada[0]}, con el motivo: {llamada[1]} está siendo atendida por el agente {agente}")
-        input("Presione Enter cuando el agente termine la llamada...")
-        agentes_disponibles.append(agente)
-        print(f"El agente {agente} ahora está disponible.\n")
-    else:
-        print("No hay llamadas en la cola para atender\n")
+def atender_llamada(agente, llamada):
+    print(f"{agente} está atendiendo la llamada de {llamada[0]} (Motivo: {llamada[1]})")
+    duracion = randint(2,6)# simula duración entre 2 y 6 segundos
+    sleep(duracion)
+    print(f"{agente} terminó de atender a {llamada[0]} (Duración: {duracion}s)")
+    return agente
+
+def despachar_llamadas():
+    tareas = []
+    agentes_en_servicio = []
+    with ThreadPoolExecutor(max_workers=len(agentes_disponibles)) as executor:
+        while llamadas and agentes_disponibles:
+            agente = agentes_disponibles.pop(0)
+            llamada = llamadas.popleft()
+            tarea = executor.submit(atender_llamada, agente, llamada)
+            tareas.append(tarea)
+            agentes_en_servicio.append(agente)
+        #esperar a que todos los agentes terminen antes de devolverlos a la lista de disponibles
+        for future in as_completed(tareas):
+            agente_que_vuelve = future.result()
+            agentes_disponibles.append(agente_que_vuelve)
+        if not tareas:
+            print("No hay llamadas o agentes disponibles para despachar.\n")
 
 def visualizar_cola():
     print("Llamadas en la cola: ")
@@ -48,7 +61,7 @@ def menu():
     while True:
         print("Menú call center")
         print("1. Agregar llamadas a la cola")
-        print("2. Atender siguiente llamada")
+        print("2. Atender llamadas (simulación automática)")
         print("3. Visualizar llamadas en la cola")
         print("4. Visualizar agentes disponibles")
         print("5. Salir")
@@ -57,7 +70,7 @@ def menu():
         if opcion == "1":
             agregar_llamada()
         elif opcion == "2":
-            atender_llamadas()
+            despachar_llamadas()
         elif opcion == "3":
             visualizar_cola()
         elif opcion == "4":
