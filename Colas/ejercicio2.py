@@ -27,7 +27,7 @@ def despachar_llamadas():
         tareas = []
         agentes_en_servicio = []
         
-        # Usamos el ThreadPoolExecutor con la cantidad actual de agentes disponibles
+    # Usamos el ThreadPoolExecutor con la cantidad actual de agentesn  disponibles
         with ThreadPoolExecutor(max_workers=len(agentes_disponibles)) as executor:
             # asignamos llamadas a todos los agentes disponibles
             while llamadas and agentes_disponibles:
