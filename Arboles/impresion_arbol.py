@@ -19,3 +19,46 @@ def imprimir_arbol(nodo, prefijo="", es_ultimo=True, es_raiz=True):
     for i, sub in enumerate(nodo.subordinados):
         es_ultimo_hijo = (i == total_subordinados - 1)
         imprimir_arbol(sub, nuevo_prefijo, es_ultimo_hijo, es_raiz=False)
+
+#funcion para igualmente imprimir pero que sea
+#compatible con un html
+
+def obtener_jerarquia_html(nodo, prefijo="", es_ultimo=True, es_raiz=True):
+    if nodo is None:
+        return ""
+
+    resultado = ""
+    if es_raiz:
+        resultado += nodo.empleado.nombre + "<br>"
+    else:
+        rama = "└── " if es_ultimo else "├── "
+        resultado += prefijo + rama + nodo.empleado.nombre + "<br>"
+
+    nuevo_prefijo = prefijo + ("&nbsp;&nbsp;&nbsp;&nbsp;" if not es_raiz and es_ultimo else "│&nbsp;&nbsp;") if not es_raiz else ""
+    total_sub = len(nodo.subordinados)
+
+    for i, sub in enumerate(nodo.subordinados):
+        es_ultimo_hijo = (i == total_sub - 1)
+        resultado += obtener_jerarquia_html(sub, nuevo_prefijo, es_ultimo_hijo, es_raiz=False)
+
+    return resultado
+
+def obtener_estructura_arbol(nodo, prefijo="", es_ultimo=True, es_raiz=True):
+    if nodo is None:
+        return ""
+
+    resultado = ""
+    if es_raiz:
+        resultado += nodo.nombre + "\n"
+    else:
+        rama = "└── " if es_ultimo else "├── "
+        resultado += prefijo + rama + nodo.nombre + "\n"
+
+    nuevo_prefijo = prefijo + ("    " if es_ultimo else "│   ")
+    total_sub = len(nodo.hijos)
+
+    for i, sub in enumerate(nodo.hijos):
+        es_ultimo_hijo = (i == total_sub - 1)
+        resultado += obtener_estructura_arbol(sub, nuevo_prefijo, es_ultimo_hijo, es_raiz=False)
+
+    return resultado

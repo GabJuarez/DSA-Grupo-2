@@ -39,7 +39,7 @@ def InsertarCategoría():
 
 def InsertarSubcategoría():
     if raíz is None:
-        resultados.insert(tk.END, "Establesca una categoría principal...\n")
+        resultados.insert(tk.END, "Establezca una categoría principal...\n")
         return
 
     NombreCategoria = entrada.get()
