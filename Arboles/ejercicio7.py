@@ -90,11 +90,11 @@ def MostrarSubcategorias():
     
     subcategorias = ObtenerSubcategorias(raíz, NombreCategoria)
     if subcategorias is None:
-        resultados.insert(tk.END, f"No se encontró la categoría '{NombreCategoria}'.\n")
+        resultados.insert(tk.END, "No se encontró la categoría '{0}'...\n".format(NombreCategoria))
     elif len(subcategorias) == 0:
-        resultados.insert(tk.END, f"La categoría '{NombreCategoria}' no tiene subcategorías.\n")
+        resultados.insert(tk.END, "La categoría '{0}' no tiene subcategorías...\n".format(NombreCategoria))
     else:
-        resultados.insert(tk.END, f"Subcategorías dentro de '{NombreCategoria}':\n")
+        resultados.insert(tk.END, "Subcategorías dentro de '{0}':\n".format(NombreCategoria))
         for subcat in subcategorias:
             resultados.insert(tk.END, f" - {subcat}\n")
 
