@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Arboles, jerarquía organizacional</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <h1>Organigrama de la empresa</h1>
+
+    {% if mensaje %}
+        <p><strong>{{ mensaje }}</strong></p>
+    {% endif %}
+
+    {% if not ceo %}
+        <!-- El navegador envía una petición POST al servidor con los inputs.
+             Flask recibe la petición y obtiene los datos con request.form.get -->
+        <form method="POST">
+            <label>Nombre del CEO:</label>
+            <input type="text" name="nombre_ceo" required>
+            <button type="submit">Agregar al CEO</button>
+        </form>
+    {% else %}
+        <form method="POST">
+            <label>Nombre del jefe:</label>
+            <input type="text" name="nombre_jefe" required>
+            <br>
+            <label>Nombre del empleado:</label>
+            <input type="text" name="nombre_sub" required>
+            <br>
+            <button type="submit">Agregar empleado</button>
+        </form>
+
+        <h2>Árbol actual:</h2>
+        <!-- La siguiente línea usa Jinja y el filtro "safe" para renderizar HTML sin escaparlo -->
+        <p>{{ jerarquia | safe }}</p>
+
+        <h3>Profundidad del árbol:</h3>
+        <p>{{ profundidad }}</p>
+    {% endif %}
+</body>
+
+</html>
